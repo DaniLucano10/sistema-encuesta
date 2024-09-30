@@ -1,141 +1,189 @@
-import { Box, Button, FormControl, FormLabel, Input, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-
-interface FormData {
-    name: string;
-    email: string;
-    address: string;
-    phone?: string;
-    feedback?: string;
-}
-
-const schema = yup.object().shape({
-    name: yup.string().required('Nombre es obligatorio'),
-    email: yup.string().email('Email no válido').required('Email es obligatorio'),
-    address: yup.string().required('Dirección es obligatoria'),
-});
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  List,
+  ListIcon,
+  ListItem,
+  Text,
+} from "@chakra-ui/react";
+import React, { useState } from "react";
+import { MdCheckCircle } from "react-icons/md";
 
 const SurveyForm: React.FC = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-        resolver: yupResolver(schema),
-    });
-    const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
 
-    const onSubmit: SubmitHandler<FormData> = (data) => {
-        console.log(data);
-    };
+  const handleCardClick = (card: string) => {
+    setSelectedCard(card);
+  };
 
-    const handleCardClick = (card: string) => {
-        setSelectedCard(card);
-    };
-
-    return (
-        <Box display="flex" alignItems="center" justifyContent="center" height="100vh" width="100%" margin={4}>
-            <Box width="50%" p={6} >
-                <Box bg="blue.500" p={20} borderRadius="md" mb={4}>
-                    <Text color="white" fontSize="lg" fontWeight="bold" textAlign="center">Formulario de Encuesta</Text>
-                </Box>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Box 
-                        mb={4} 
-                        p={4} 
-                        borderLeft={selectedCard === 'clientData' ? '4px solid teal' : 'none'}
-                        onClick={() => handleCardClick('clientData')}
-                        borderTop="4px solid teal"
-                        borderRadius="md"
-                        bg="gray.100"
-                    >
-                        <Text fontSize="xl" fontWeight="bold">Datos del Cliente</Text>
-                        <Input
-                            placeholder="Descripcion del formulario"
-                            mt={2}
-                            {...register('clientData')}
-                        />
-                    </Box>
-
-                    <Box 
-                        mb={4} 
-                        p={4} 
-                        borderLeft={selectedCard === 'name' ? '4px solid teal' : 'none'}
-                        onClick={() => handleCardClick('name')}
-                        borderTop="4px solid teal"
-                        borderRadius="md"
-                        bg="gray.100"
-                    >
-                        <FormControl isInvalid={!!errors.name}>
-                            <FormLabel htmlFor="name">Nombre</FormLabel>
-                            <Input id="name" placeholder="Ingresa tu nombre" {...register('name')} />
-                        </FormControl>
-                    </Box>
-
-                    <Box 
-                        mb={4} 
-                        p={4} 
-                        borderLeft={selectedCard === 'email' ? '4px solid teal' : 'none'}
-                        onClick={() => handleCardClick('email')}
-                        borderTop="4px solid teal"
-                        borderRadius="md"
-                        bg="gray.100"
-                    >
-                        <FormControl isInvalid={!!errors.email}>
-                            <FormLabel htmlFor="email">Email <Text as="span" color="red.500">*</Text></FormLabel>
-                            <Input id="email" type="email" placeholder="Ingresa tu email" {...register('email')} />
-                        </FormControl>
-                    </Box>
-
-                    <Box 
-                        mb={4} 
-                        p={4} 
-                        borderLeft={selectedCard === 'address' ? '4px solid teal' : 'none'}
-                        onClick={() => handleCardClick('address')}
-                        borderTop="4px solid teal"
-                        borderRadius="md"
-                        bg="gray.100"
-                    >
-                        <FormControl isInvalid={!!errors.address}>
-                            <FormLabel htmlFor="address">Dirección <Text as="span" color="red.500">*</Text></FormLabel>
-                            <Input id="address" placeholder="Ingresa tu dirección" {...register('address')} />
-                        </FormControl>
-                    </Box>
-
-                    <Box 
-                        mb={4} 
-                        p={4} 
-                        borderLeft={selectedCard === 'phone' ? '4px solid teal' : 'none'}
-                        onClick={() => handleCardClick('phone')}
-                        borderTop="4px solid teal"
-                        borderRadius="md"
-                        bg="gray.100"
-                    >
-                        <FormControl>
-                            <FormLabel htmlFor="phone">Teléfono</FormLabel>
-                            <Input id="phone" placeholder="Ingresa tu teléfono (opcional)" {...register('phone')} />
-                        </FormControl>
-                    </Box>
-
-                    <Box 
-                        mb={4} 
-                        p={4} 
-                        borderLeft={selectedCard === 'feedback' ? '4px solid teal' : 'none'}
-                        onClick={() => handleCardClick('feedback')}
-                        borderTop="4px solid teal"
-                        borderRadius="md"
-                        bg="gray.100"
-                    >
-                        <FormControl>
-                            <FormLabel htmlFor="feedback">Comentarios</FormLabel>
-                            <Input id="feedback" placeholder="Comentarios (opcional)" {...register('feedback')} />
-                        </FormControl>
-                    </Box>
-
-                    <Button mt={4} colorScheme="teal" type="submit">Enviar</Button>
-                </form>
+  console.log(handleCardClick);
+  return (
+    <Box bg="#F2F2F2">
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        width="100%"
+      >
+        <Box width="90%" maxW="700px" mt={2}>
+          <Box bg="#12B75E" p={{ base: 8, md: 16 }} borderRadius="md" mb={2}>
+            <Text
+              color="white"
+              fontWeight="bold"
+              textAlign="center"
+              fontSize={{ base: "2xl", md: "3xl" }}
+            >
+              Formulario de Encuesta
+            </Text>
+          </Box>
+          <form >
+            <Box
+              mb={4}
+              p={4}
+              borderLeft={
+                selectedCard === "clientData" ? "6px solid #019CFE" : "none"
+              }
+              onClick={() => handleCardClick("clientData")}
+              borderTop="10px solid #12B75E"
+              borderRadius="md"
+              bg="#FFFFFF"
+            >
+              <Text fontSize="xl" fontWeight="bold">
+                Datos del Cliente
+              </Text>
+              <List spacing={1}>
+                <ListItem>
+                  <ListIcon as={MdCheckCircle} color="green.500" />
+                  Nombre:
+                </ListItem>
+                <ListItem>
+                  <ListIcon as={MdCheckCircle} color="green.500" />
+                  Asesor:
+                </ListItem>
+                <ListItem>
+                  <ListIcon as={MdCheckCircle} color="green.500" />
+                  Usuario:
+                </ListItem>
+              </List>
             </Box>
+
+            <Box
+              mb={4}
+              p={4}
+              borderLeft={
+                selectedCard === "question1" ? "6px solid #019CFE" : "none"
+              }
+              onClick={() => handleCardClick("question1")}
+              borderRadius="md"
+              bg="#FFFFFF"
+            >
+              <FormControl>
+                <FormLabel htmlFor="question1">Pregunta 1</FormLabel>
+                <Input
+                  id="question1"
+                  placeholder="Respuesta"
+                  border="none"
+                  borderBottom="2px solid"
+                  borderColor="gray.300"
+                />
+              </FormControl>
+            </Box>
+            <Box
+              mb={4}
+              p={4}
+              borderLeft={
+                selectedCard === "question1" ? "6px solid #019CFE" : "none"
+              }
+              onClick={() => handleCardClick("question1")}
+              borderRadius="md"
+              bg="#FFFFFF"
+            >
+              <FormControl>
+                <FormLabel htmlFor="question1">Pregunta 1</FormLabel>
+                <Input
+                  id="question1"
+                  placeholder="Respuesta"
+                  border="none"
+                  borderBottom="2px solid"
+                  borderColor="gray.300"
+                />
+              </FormControl>
+            </Box>
+            <Box
+              mb={4}
+              p={4}
+              borderLeft={
+                selectedCard === "question1" ? "6px solid #019CFE" : "none"
+              }
+              onClick={() => handleCardClick("question1")}
+              borderRadius="md"
+              bg="#FFFFFF"
+            >
+              <FormControl>
+                <FormLabel htmlFor="question1">Pregunta 1</FormLabel>
+                <Input
+                  id="question1"
+                  placeholder="Respuesta"
+                  border="none"
+                  borderBottom="2px solid"
+                  borderColor="gray.300"
+                />
+              </FormControl>
+            </Box>
+            <Box
+              mb={4}
+              p={4}
+              borderLeft={
+                selectedCard === "question1" ? "6px solid #019CFE" : "none"
+              }
+              onClick={() => handleCardClick("question1")}
+              borderRadius="md"
+              bg="#FFFFFF"
+            >
+              <FormControl>
+                <FormLabel htmlFor="question1">Pregunta 1</FormLabel>
+                <Input
+                  id="question1"
+                  placeholder="Respuesta"
+                  border="none"
+                  borderBottom="2px solid"
+                  borderColor="gray.300"
+                />
+              </FormControl>
+            </Box>
+            <Box
+              mb={4}
+              p={4}
+              borderLeft={
+                selectedCard === "question1" ? "6px solid #019CFE" : "none"
+              }
+              onClick={() => handleCardClick("question1")}
+              borderRadius="md"
+              bg="#FFFFFF"
+            >
+              <FormControl>
+                <FormLabel htmlFor="question1">Pregunta 1</FormLabel>
+                <Input
+                  id="question1"
+                  placeholder="Respuesta"
+                  border="none"
+                  borderBottom="2px solid"
+                  borderColor="gray.300"
+                />
+              </FormControl>
+            </Box>
+
+            <Button mt={4} bg="#09155F" color="white" type="submit">
+              Guardar
+            </Button>
+          </form>
         </Box>
-    );
-}
+      </Box>
+    </Box>
+  );
+};
 
 export default SurveyForm;
