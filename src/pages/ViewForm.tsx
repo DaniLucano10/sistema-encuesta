@@ -1,25 +1,57 @@
+import React, { useState } from "react";
 import {
   Box,
   Button,
   FormControl,
   FormLabel,
   Input,
-  List,
-  ListIcon,
-  ListItem,
   Text,
+  CheckboxGroup,
+  Checkbox,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { MdCheckCircle } from "react-icons/md";
+import { Question } from "../data/Questions";
+
+const questions: Question[] = [
+  { id: "q1", text: "¿Cuál es tu nombre?", type: "text" },
+  { id: "q2", text: "¿Cuál es tu color favorito?", type: "text" },
+  {
+    id: "q3",
+    text: "¿Qué deportes practicas?",
+    type: "multiple",
+    options: ["Fútbol", "Baloncesto", "Tenis", "Natación"],
+  },
+  {
+    id: "q4",
+    text: "¿Qué géneros de música prefieres?",
+    type: "multiple",
+    options: ["Rock", "Pop", "Jazz", "Clásica"],
+  },
+];
 
 const SurveyForm: React.FC = () => {
-  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [answers, setAnswers] = useState<{ [key: string]: string | string[] }>(
+    {}
+  );
+  const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
 
-  const handleCardClick = (card: string) => {
-    setSelectedCard(card);
+  const handleTextChange = (questionId: string, value: string) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
   };
 
-  console.log(handleCardClick);
+  const handleCheckboxChange = (questionId: string, value: string[]) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+  };
+
+  const handleQuestionClick = (questionId: string) => {
+    setSelectedQuestion(questionId);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(answers);
+    // Aquí puedes enviar las respuestas a tu backend
+  };
+
   return (
     <Box bg="#F2F2F2">
       <Box
@@ -39,144 +71,62 @@ const SurveyForm: React.FC = () => {
               Formulario de Encuesta
             </Text>
           </Box>
-          <form >
-            <Box
-              mb={4}
-              p={4}
-              borderLeft={
-                selectedCard === "clientData" ? "6px solid #019CFE" : "none"
-              }
-              onClick={() => handleCardClick("clientData")}
-              borderTop="10px solid #12B75E"
-              borderRadius="md"
-              bg="#FFFFFF"
+          <form onSubmit={handleSubmit}>
+            {questions.map((question) => (
+              <Box
+                key={question.id}
+                mb={4}
+                p={4}
+                borderLeft={
+                  selectedQuestion === question.id
+                    ? "6px solid #019CFE"
+                    : "none"
+                }
+                onClick={() => handleQuestionClick(question.id)}
+                borderRadius="md"
+                bg="#FFFFFF"
+              >
+                <FormControl>
+                  <FormLabel htmlFor={question.id}>{question.text}</FormLabel>
+                  {question.type === "text" ? (
+                    <Input
+                      id={question.id}
+                      value={(answers[question.id] as string) || ""}
+                      onChange={(e) =>
+                        handleTextChange(question.id, e.target.value)
+                      }
+                      placeholder="Respuesta"
+                      border="none"
+                      borderBottom="2px solid"
+                      borderColor="gray.300"
+                    />
+                  ) : (
+                    <CheckboxGroup
+                      value={(answers[question.id] as string[]) || []}
+                      onChange={(value) =>
+                        handleCheckboxChange(question.id, value as string[])
+                      }
+                    >
+                      {question.options?.map((option) => (
+                        <Box key={option}>
+                          <Checkbox value={option}>{option}</Checkbox>
+                        </Box>
+                      ))}
+                    </CheckboxGroup>
+                  )}
+                </FormControl>
+              </Box>
+            ))}
+            <Button
+              mt={4}
+              bg="#09155F"
+              color="white"
+              type="submit"
+              _hover={{
+                bg: "#0A1A7D", 
+                boxShadow: "0px 4px 10px rgba(9, 21, 95, 0.3)", 
+              }}
             >
-              <Text fontSize="xl" fontWeight="bold">
-                Datos del Cliente
-              </Text>
-              <List spacing={1}>
-                <ListItem>
-                  <ListIcon as={MdCheckCircle} color="green.500" />
-                  Nombre:
-                </ListItem>
-                <ListItem>
-                  <ListIcon as={MdCheckCircle} color="green.500" />
-                  Asesor:
-                </ListItem>
-                <ListItem>
-                  <ListIcon as={MdCheckCircle} color="green.500" />
-                  Usuario:
-                </ListItem>
-              </List>
-            </Box>
-
-            <Box
-              mb={4}
-              p={4}
-              borderLeft={
-                selectedCard === "question1" ? "6px solid #019CFE" : "none"
-              }
-              onClick={() => handleCardClick("question1")}
-              borderRadius="md"
-              bg="#FFFFFF"
-            >
-              <FormControl>
-                <FormLabel htmlFor="question1">Pregunta 1</FormLabel>
-                <Input
-                  id="question1"
-                  placeholder="Respuesta"
-                  border="none"
-                  borderBottom="2px solid"
-                  borderColor="gray.300"
-                />
-              </FormControl>
-            </Box>
-            <Box
-              mb={4}
-              p={4}
-              borderLeft={
-                selectedCard === "question1" ? "6px solid #019CFE" : "none"
-              }
-              onClick={() => handleCardClick("question1")}
-              borderRadius="md"
-              bg="#FFFFFF"
-            >
-              <FormControl>
-                <FormLabel htmlFor="question1">Pregunta 1</FormLabel>
-                <Input
-                  id="question1"
-                  placeholder="Respuesta"
-                  border="none"
-                  borderBottom="2px solid"
-                  borderColor="gray.300"
-                />
-              </FormControl>
-            </Box>
-            <Box
-              mb={4}
-              p={4}
-              borderLeft={
-                selectedCard === "question1" ? "6px solid #019CFE" : "none"
-              }
-              onClick={() => handleCardClick("question1")}
-              borderRadius="md"
-              bg="#FFFFFF"
-            >
-              <FormControl>
-                <FormLabel htmlFor="question1">Pregunta 1</FormLabel>
-                <Input
-                  id="question1"
-                  placeholder="Respuesta"
-                  border="none"
-                  borderBottom="2px solid"
-                  borderColor="gray.300"
-                />
-              </FormControl>
-            </Box>
-            <Box
-              mb={4}
-              p={4}
-              borderLeft={
-                selectedCard === "question1" ? "6px solid #019CFE" : "none"
-              }
-              onClick={() => handleCardClick("question1")}
-              borderRadius="md"
-              bg="#FFFFFF"
-            >
-              <FormControl>
-                <FormLabel htmlFor="question1">Pregunta 1</FormLabel>
-                <Input
-                  id="question1"
-                  placeholder="Respuesta"
-                  border="none"
-                  borderBottom="2px solid"
-                  borderColor="gray.300"
-                />
-              </FormControl>
-            </Box>
-            <Box
-              mb={4}
-              p={4}
-              borderLeft={
-                selectedCard === "question1" ? "6px solid #019CFE" : "none"
-              }
-              onClick={() => handleCardClick("question1")}
-              borderRadius="md"
-              bg="#FFFFFF"
-            >
-              <FormControl>
-                <FormLabel htmlFor="question1">Pregunta 1</FormLabel>
-                <Input
-                  id="question1"
-                  placeholder="Respuesta"
-                  border="none"
-                  borderBottom="2px solid"
-                  borderColor="gray.300"
-                />
-              </FormControl>
-            </Box>
-
-            <Button mt={4} bg="#09155F" color="white" type="submit">
               Guardar
             </Button>
           </form>
