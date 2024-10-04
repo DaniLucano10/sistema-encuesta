@@ -28,10 +28,17 @@ const questions: Question[] = [
   },
 ];
 
+
+
 const SurveyForm: React.FC = () => {
   const [answers, setAnswers] = useState<{ [key: string]: string | string[] }>(
     {}
   );
+  const [clientData, setClientData] = useState({
+    name: "Juan Pérez",
+    email: "juan.perez@example.com",
+    phone: "9452332523"
+  });
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
 
   const handleTextChange = (questionId: string, value: string) => {
@@ -52,6 +59,7 @@ const SurveyForm: React.FC = () => {
     // Aquí puedes enviar las respuestas a tu backend
   };
 
+  
   return (
     <Box bg="#F2F2F2">
       <Box
@@ -71,6 +79,14 @@ const SurveyForm: React.FC = () => {
               Formulario de Encuesta
             </Text>
           </Box>
+          <Box bg="white" p={4} borderRadius="md" mb={4} boxShadow="md">
+        <Text fontSize="xl" fontWeight="bold" mb={2}>
+          Datos del Cliente
+        </Text>
+        <Text>Nombre: {clientData.name}</Text>
+        <Text>Email: {clientData.email}</Text>
+        <Text>Teléfono: {clientData.phone}</Text>
+      </Box>
           <form onSubmit={handleSubmit}>
             {questions.map((question) => (
               <Box
