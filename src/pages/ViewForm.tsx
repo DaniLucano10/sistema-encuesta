@@ -10,6 +10,7 @@ import {
   Checkbox,
 } from "@chakra-ui/react";
 import { useFetchAnswers, useRegisterAnswer } from "../hook";
+import { useParams } from "react-router-dom";
 
 interface Question {
   id: string;
@@ -22,10 +23,10 @@ const ViewForm: React.FC = () => {
   const [answers, setAnswers] = useState<{ [key: string]: string | string[] }>({});
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
-
+  const { encryptedId } = useParams<{ encryptedId: string }>();
   // Pasar el parámetro 'id' que deseas filtrar
-  const formSendedId = 2;
-  const formParams = useMemo(() => ({ id: formSendedId }), [formSendedId]);
+  //const formSendedId = 2;
+  const formParams = useMemo(() => ({ id: encryptedId }), [encryptedId]);
   const { data, loading, error } = useFetchAnswers(formParams);
   const { register, loading: loadingRegister, error: errorRegister } = useRegisterAnswer({
     close: () => { },
@@ -71,7 +72,7 @@ const ViewForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = {
-      form_sended_id: formSendedId, 
+      form_sended_id: encryptedId, 
       answers: Object.entries(answers).map(([questionId, response]) => {
           const formattedResponse = Array.isArray(response)
               ? response.join(", ") //respuestas multiples

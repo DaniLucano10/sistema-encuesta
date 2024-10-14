@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import axios, { AxiosError } from 'axios';
+import decryptId from '../utils/decrypt';
 
 interface Params {
-  // Define los tipos de los parámetros aquí
-  [key: string]: string | number;
+  id: string; // ID encriptado
 }
 
 interface ResponseData {
   // Define la estructura de los datos de respuesta aquí
-  [key: string]: string;
+  [key: string]: any; // Cambiado a 'any' para mayor flexibilidad
 }
 
 export const useFetchAnswers = (params: Params) => {
@@ -25,15 +25,18 @@ export const useFetchAnswers = (params: Params) => {
     setError(null);
 
     try {
+      // Desencriptar el ID
+      const decryptedId = decryptId(memoizedParams.id);
+
       const response = await axios.get<ResponseData>(
         'http://demo.itsystems.ai:3010/form_sended',
         {
-          params: memoizedParams,
+          params: { id: decryptedId },
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       setData(response.data);
-      console.log("Params:", memoizedParams);
+      console.log("Decrypted ID:", decryptedId);
     } catch (err) {
       const error = err as AxiosError;
       setError(
@@ -47,7 +50,7 @@ export const useFetchAnswers = (params: Params) => {
   }, [memoizedParams]);
 
   useEffect(() => {
-    fetchAnswers(); // Solo se ejecutará una vez o cuando cambien los params
+    fetchAnswers();
   }, [fetchAnswers]);
 
   return { loading, data, error, fetchAnswers };
