@@ -1,14 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 
-// Define tipos para los parámetros y la respuesta
-type Params = Record<string, string | number>;
-type ResponseData = []; 
+interface Params {
+  // Define los tipos de los parámetros aquí
+  [key: string]: string | number;
+}
+
+interface ResponseData {
+  // Define la estructura de los datos de respuesta aquí
+  [key: string]: string;
+}
 
 export const useFetchAnswers = (params: Params) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<ResponseData | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const token = 'WhBBBgH35hnVBBiUyL1I';
 
   const memoizedParams = useMemo(() => params, [params]);
 
@@ -19,14 +27,18 @@ export const useFetchAnswers = (params: Params) => {
     try {
       const response = await axios.get<ResponseData>(
         'http://demo.itsystems.ai:3010/form_sended',
-        { params: memoizedParams }
+        {
+          params: memoizedParams,
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       setData(response.data);
+      console.log("Params:", memoizedParams);
     } catch (err) {
       const error = err as AxiosError;
       setError(
         error.response
-          ? error.response.data as string
+          ? (error.response.data as string)
           : 'Ha ocurrido un error al obtener los datos.'
       );
     } finally {
@@ -35,7 +47,7 @@ export const useFetchAnswers = (params: Params) => {
   }, [memoizedParams]);
 
   useEffect(() => {
-    fetchAnswers();
+    fetchAnswers(); // Solo se ejecutará una vez o cuando cambien los params
   }, [fetchAnswers]);
 
   return { loading, data, error, fetchAnswers };
