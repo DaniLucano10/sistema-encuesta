@@ -182,11 +182,11 @@ const ViewForm: React.FC = () => {
           <Text
             mt={2}
             color="#019CFE"
-            textDecoration="underline"
+            //textDecoration="underline"
             cursor="pointer"
-            onClick={() => setSubmitted(false)}
+            //onClick={() => setSubmitted(false)}
           >
-            Regresar
+            Gracias
           </Text>
         </Box>
       </Box>
@@ -301,7 +301,7 @@ const ViewForm: React.FC = () => {
             >
               Guardar
             </Button>
-            {errorRegister &&
+            {/*{errorRegister &&
             typeof errorRegister === "object" &&
             "message" in errorRegister ? (
               <Text color="red.500">
@@ -309,7 +309,7 @@ const ViewForm: React.FC = () => {
               </Text>
             ) : (
               <Text color="red.500">Error: {errorRegister}</Text>
-            )}
+            )} */}
           </form>
         </Box>
       </Box>
