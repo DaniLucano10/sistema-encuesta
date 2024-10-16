@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import axios, { AxiosError } from 'axios';
-import decryptId from '../utils/decrypt';
 
 interface Params {
-  id: string; // ID encriptado
+  id?: string; // Agregar el ID desencriptado como un parámetro opcional
+  [key: string]: string | number | undefined; // Permitir otros parámetros
 }
 
 interface ResponseData {
-  // Define la estructura de los datos de respuesta aquí
-  [key: string]: any; // Cambiado a 'any' para mayor flexibilidad
+  [key: string]: string;
 }
 
 export const useFetchAnswers = (params: Params) => {
@@ -21,22 +20,25 @@ export const useFetchAnswers = (params: Params) => {
   const memoizedParams = useMemo(() => params, [params]);
 
   const fetchAnswers = useCallback(async () => {
+    if (!memoizedParams.id) {
+      console.warn("No se proporcionó un ID para la consulta."); // Advertencia si no hay ID
+      return; // No hacer la llamada si no hay ID
+    }
+
     setLoading(true);
     setError(null);
 
-    try {
-      // Desencriptar el ID
-      const decryptedId = decryptId(memoizedParams.id);
+    console.log("Params enviados a la API:", memoizedParams); // Verifica los parámetros
 
+    try {
       const response = await axios.get<ResponseData>(
-        'http://demo.itsystems.ai:3010/form_sended',
+        'http://demo.itsystems.ai:3010/form_sended/list',
         {
-          params: { id: decryptedId },
+          params: memoizedParams,
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       setData(response.data);
-      console.log("Decrypted ID:", decryptedId);
     } catch (err) {
       const error = err as AxiosError;
       setError(
@@ -50,7 +52,7 @@ export const useFetchAnswers = (params: Params) => {
   }, [memoizedParams]);
 
   useEffect(() => {
-    fetchAnswers();
+    fetchAnswers(); // Solo se ejecutará una vez o cuando cambien los params
   }, [fetchAnswers]);
 
   return { loading, data, error, fetchAnswers };

@@ -8,7 +8,7 @@ function App() {
     <Router>
       <Routes>
       <Route path="/getID" element={<EncryptPage />} />
-        <Route path="/viewform/:encryptedId"  element={<ViewForm />}/>
+        <Route path="/viewform"  element={<ViewForm />}/>
       </Routes>
     </Router>
   )
