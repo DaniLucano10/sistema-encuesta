@@ -32,7 +32,7 @@ export const useFetchAnswers = (params: Params) => {
 
     try {
       const response = await axios.get<ResponseData>(
-        'http://demo.itsystems.ai:3010/form_sended/list',
+        'https://demo.itsystems.ai/form_sended/list',
         {
           params: memoizedParams,
           headers: { Authorization: `Bearer ${token}` },

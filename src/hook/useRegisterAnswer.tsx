@@ -23,7 +23,7 @@ export const useRegisterAnswer = ({ close, fetch }: { close: () => void; fetch: 
 		try {
 			const token = 'WhBBBgH35hnVBBiUyL1I';
 			const response = await axios.post(
-				'http://demo.itsystems.ai:3010/answer',
+				'https://demo.itsystems.ai/answer',
 				formData,
 				{
 					headers: { Authorization: `Bearer ${token}` },
