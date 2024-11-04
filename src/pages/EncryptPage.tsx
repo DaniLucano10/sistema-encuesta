@@ -31,7 +31,7 @@ const EncryptPage: React.FC = () => {
     // Encriptar el ID cuando se hace clic en el botón
     const encryptedId = encryptId(id); // Suponiendo que esta función encripta el ID
     setError("");
-    setEncryptedUrl(`http://localhost:5175/viewform?id=${encryptedId}`); // Almacenar la URL encriptada en el estado
+    setEncryptedUrl(`http://localhost:5177/viewform?id=${encryptedId}`); // Almacenar la URL encriptada en el estado
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
