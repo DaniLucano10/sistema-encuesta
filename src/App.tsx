@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ViewForm from "./pages/ViewForm";
 import EncryptPage from "./pages/EncryptPage";
+import FormView from "./pages/FormView";
 
 function App() {
 
@@ -8,7 +8,7 @@ function App() {
     <Router>
       <Routes>
       <Route path="/getID" element={<EncryptPage />} />
-        <Route path="/viewform"  element={<ViewForm />}/>
+        <Route path="/formview"  element={<FormView />}/>
       </Routes>
     </Router>
   )
